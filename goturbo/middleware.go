@@ -1,13 +1,15 @@
 package goturbo
 
 import (
+	"log"
 	"net/http"
+	"time"
 )
 
-type MiddlewareFunc func(http.HandlerFunc) http.HandlerFunc
-
-func (r *Router) Use(mw MiddlewareFunc) {
-	for pattern, handler := range r.handlers {
-		r.handlers[pattern] = mw(handler)
+func LoggingMiddleware(next HandlerFunc) HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next(w, r)
+		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
 	}
 }
