@@ -1,4 +1,4 @@
-package framework
+package goturbo
 
 import (
 	"net/http"
